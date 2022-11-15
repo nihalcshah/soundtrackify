@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<section class="container d-flex align-items-center justify-content-center" style="height: 80%">
+    <div class="text-center">
+        <h1 class="">Soundtrackify</h1>
+        <h6>Utilizing Spotify API to create and connect songs into soundtracks</h6>
+        <br>
+        <a href="{% url 'track' %}" class="btn btn-outline-success">Find Soundtracks</a>
+    </div>
+</section>
+
+{% endblock %}

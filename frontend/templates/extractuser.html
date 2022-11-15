@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<section class="container d-flex align-items-center justify-content-center" style="height: 80%">
+    <div class="rounded dark">
+        <form action="" method="post">
+            {% csrf_token %}
+            <input type="text" name="username" id="username">
+            <button type="submit" class="btn btn-submit">Submit</button>
+        </form>
+    </div>
+</section>
+
+{% endblock %}
