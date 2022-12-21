@@ -31,5 +31,31 @@ def evaluatePlaylistTracks(sp, playlist, auth_feature, features_list, trackIDs =
         trackIDs.append((track['uri'], k_score))
     return trackIDs
         
-            
-        # trackIDs.append['track.']
+def topPlaylistStats(sp, playlist):
+    tracks = playlist['tracks']['items']
+    albumdict = {}
+    artistdict = {}
+    genredict = {}
+    for track in tracks:
+        track = track['track']
+        trackuri = track['uri']
+        albumname = track['album']['name']
+        # album = sp.album(track['album']['uri'])
+        album = (albumname, track['album']['images'][0]['url'])
+        artist = sp.artist(track['artists'][0]['uri'])
+        # artistname = artist['name']
+        if album in albumdict:
+            albumdict[album] += 1
+        else:
+            albumdict[album] = 0
+        for artist in track['artists']:
+            artistname = artist['name']
+            if artistname in artistdict:
+                artistdict[artistname] += 1
+            else:
+                artistdict[artistname] = 0
+    print({k: v for k, v in sorted(albumdict.items(), key=lambda item: item[1])})
+    print({k: v for k, v in sorted(artistdict.items(), key=lambda item: item[1])})
+
+
+    pass

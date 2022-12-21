@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect
 import spotipy
 import json
-from .spotifyaccess import getAuth, evaluatePlaylistTracks
+from .spotifyaccess import getAuth, evaluatePlaylistTracks, topPlaylistStats
 from spotipy.oauth2 import SpotifyOAuth
 spauth = 0
 username = ''
 validToken = False
+sp = ''
 
 
 # Create your views here.
@@ -43,21 +44,26 @@ def Connect(request):
     songname = ""
     if request.method =='POST':
         print("posted")
-        if "songname" in request.POST:
-            songname = request.POST.get('songname')
-            song_list = sp.search(q=songname, limit=3, type="track")
-            # print(song_list[])
-            # print(song_list['tracks'])
-            newlist = []
-            for i in song_list['tracks']['items']:
-                newlist.append((i['name'], i['artists'][0]['name'], i['uri']))
-            return render(request, "searchsong.html", context={"playlists": playlists['items'], "songlist":newlist, "searchingsong": False, "foundsongs": True})
+        # if "songname" in request.POST:
+        playlistname = request.POST.get('playlisturi')
+        # song_list = sp.search(q=songname, limit=3, type="track")
+        ply = sp.playlist(playlistname)
+        # print(json.dumps(ply))?
+        topPlaylistStats(sp, ply)
+        # print(song_list[])
+        # print(song_list['tracks'])
+        # newlist = []
+        # for i in song_list['tracks']['items']:
+        #     newlist.append((i['name'], i['artists'][0]['name'], i['uri']))
+        # with open("sample.json", "w") as outfile:
+        #     json.dump(ply, outfile)
+        return render(request, "searchsong.html", context={"playlists": playlists['items']})
 
 
         # return render(request, "searchsong.html", context={"playlists": playlists['items'], "searchingsong": False, "foundsongs": False})
 
 
-
+ 
     return render(request, "searchsong.html", context={"playlists": playlists['items'], "searchingsong": True})
 
 from django.http import JsonResponse
@@ -68,6 +74,7 @@ def Sortsongs(request):
         trackuri = request.POST.get('songuri')
         maintrack = sp.track(trackuri)
         # print(maintrack)
+        print(likedsongs)
         song_playlists = sp.search(f"{songname} {maintrack['artists'][0]['name']}",limit=3, type="playlist")
         main_features = sp.audio_features(trackuri)[0]
         audio_features = ["danceability", "energy", "key", "loudness", "speechiness", "acousticness", "instrumentalness", "liveness", "valence", "tempo"]

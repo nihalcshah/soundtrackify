@@ -4,74 +4,26 @@
 
 {% block content %}
 
-<section class="container d-flex align-items-center px-4" style="height: 80%; margin-top: 5%;">
-    <div class="row gx-3 rounded bg-dark text-white p-4">
-        <div class="rounded-3 col bg-success p-3" style="">
-            <h4 class="row border-bottom border-white p-3">Your Playlists:</h4>
-            {% for playlist in playlists %}
-                <div class="row p-3 m-1 border-bottom border-white "">
-                    <img src="{{ playlist.images.0.url }}" class="img-fluid col-4 playlist-cover" style="" alt="">
-                    <p class="col-8 h5" style="margin-top: auto; margin-bottom: auto;"><b>{{ playlist.name }}</b></p>
-                </div>
-            {% endfor %}
-        </div>
-        {% if searchingsong %}
-        <div class="rounded col-9 px-3 d-flex align-items-center justify-content-center" style="">
+<section class="container px-4 justify-content-center" style="height: 80%; margin-top: 5%;">
+    <div class="row rounded bg-dark text-white p-4 ">
+        <div class="rounded-3 col p-3" style="">
             <form action="" method="post">
                 {% csrf_token %}
-                <div class="" style="">
-                    <h3>Select a song to make into a playlist</h3>
-                    <br>
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Song Name" name="songname" aria-label="Song Name" aria-describedby="basic-addon1">
-                        <button class="btn btn-success" type="submit">Search</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-        {% elif foundsongs %}
-        <div class="rounded col-9 px-3 d-flex align-items-center justify-content-center" id="selectform" style="">
-            <form action="{% url 'sortsongs' %}" id="formdata" method="post">
-                {% csrf_token %}
-                {% for song in songlist %}
-                    <div class="row p-2">
-                        <div class="col">
-                            <div class="row fs-3">
-                                {{ song.0 }}
-                            </div>
-                            <div class="row fs-6">
-                                {{ song.1 }}
-                            </div>
+                <h4 class="row border-bottom border-white p-3">Your Playlists:</h4>
+                {% for playlist in playlists %}
+                    <div class="row align-items-center">
+                        <div class="col my-1 p-2 rounded bg-success border-bottom border-white">
+                            <img src="{{ playlist.images.0.url }}" class="img-fluid col-4 " style="" alt="">
+                            <p class="col-8 h5" style="margin-top: auto; margin-bottom: auto;"><b>{{ playlist.name }}</b></p>
                         </div>
-                        <div class="col d-flex align-items-center">
-                            <button type="submit" class="btn btn-success" value="{{ song.2 }}" id="songuri" name="songuri">Select</button>
+                        <div class="col">
+                            <button type="submit" class="btn btn-dark" value="{{ playlist.uri }}" id="playlisturi" name="playlisturi">Select</button>
                         </div>
                     </div>
                 {% endfor %}
-            </form> 
-            <div class="spinner-border" id="spinner" style="display: none;" role="status">
-                <span class="visually-hidden">Loading...</span>
-              </div>
-            <div id="results" style="display: none;">
-                Your playlist has been made!
-            </div>
-        </div>
-        {% else %}
-        <div class="rounded col-9 px-3 d-flex align-items-center justify-content-center" style="">
-            <form action="" method="post">
-                {% csrf_token %}
-                <div class="" style="">
-                    <h3>Select a song to make into a playlist</h3>
-                    <br>
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Song Name" name="songname" aria-label="Song Name" aria-describedby="basic-addon1">
-                        <button class="btn btn-success" type="submit">Search</button>
-                    </div>
-                </div>
             </form>
         </div>
-        {% endif %}
-    </div>
+     
 </section>
 
 <script type="text/javascript">
