@@ -1,3 +1,8 @@
-.playlist-cover{
-    background-color: black;
+.cardcover:hover{
+    padding-bottom: 0.2cm;
+}
+
+.hidden{
+    border: 0cm;
+    padding: 0;
 }

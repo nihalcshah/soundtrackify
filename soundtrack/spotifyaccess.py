@@ -1,15 +1,16 @@
 from spotipy.oauth2 import SpotifyOAuth
+
 import spotipy
 import json
 
 
-def getAuth(username):
+def getAuth(request):
     return SpotifyOAuth(
         client_id="1b1729a7071f451d83b004401423bb55",
         client_secret="1d0fc8a1f6dc442daa2cee02ca0bb960",
-        redirect_uri= "http://127.0.0.1:8000/callback",
+        redirect_uri= "http://127.0.0.1:8000/connect",
         scope="user-top-read",
-        cache_path=".cache-"+username,
+        cache_handler=spotipy.DjangoSessionCacheHandler(request),
         show_dialog=True
     )
 
@@ -36,6 +37,7 @@ def topPlaylistStats(sp, playlist):
     albumdict = {}
     artistdict = {}
     genredict = {}
+    k =True
     for track in tracks:
         track = track['track']
         trackuri = track['uri']
@@ -48,14 +50,17 @@ def topPlaylistStats(sp, playlist):
             albumdict[album] += 1
         else:
             albumdict[album] = 0
+        if k:
+            print(artist)
+            k = False
         for artist in track['artists']:
             artistname = artist['name']
             if artistname in artistdict:
                 artistdict[artistname] += 1
             else:
                 artistdict[artistname] = 0
-    print({k: v for k, v in sorted(albumdict.items(), key=lambda item: item[1])})
-    print({k: v for k, v in sorted(artistdict.items(), key=lambda item: item[1])})
+    # print({k: v for k, v in sorted(albumdict.items(), key=lambda item: item[1])})
+    # print({k: v for k, v in sorted(artistdict.items(), key=lambda item: item[1])})
 
 
     pass

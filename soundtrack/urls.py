@@ -4,9 +4,7 @@ from . import views
 urlpatterns = [
     path('', views.Home, name='home'),
     path('track', views.Track, name='track'),
-    path('connect', views.Connect, name="connect"),
-    path('sortsongs', views.Sortsongs, name="sortsongs")
-    # path('camera', views.Camera, name='camera'),
+    path('connect', views.Select, name='connect'),
 ]
 
 from django.conf import settings
