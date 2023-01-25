@@ -2,6 +2,10 @@ from spotipy.oauth2 import SpotifyOAuth
 
 import spotipy
 import json
+from PIL import Image
+import requests
+from io import BytesIO
+import random
 
 
 def getAuth(request):
@@ -32,7 +36,8 @@ def evaluatePlaylistTracks(sp, playlist, auth_feature, features_list, trackIDs =
         trackIDs.append((track['uri'], k_score))
     return trackIDs
         
-def topPlaylistStats(sp, playlist):
+def topPlaylistStats(sp, playlisturi):
+    playlist = sp.playlist(playlisturi)
     tracks = playlist['tracks']['items']
     albumdict = {}
     artistdict = {}
@@ -43,7 +48,7 @@ def topPlaylistStats(sp, playlist):
         trackuri = track['uri']
         albumname = track['album']['name']
         # album = sp.album(track['album']['uri'])
-        album = (albumname, track['album']['images'][0]['url'])
+        album = track['album']['images'][0]['url']
         artist = sp.artist(track['artists'][0]['uri'])
         # artistname = artist['name']
         if album in albumdict:
@@ -51,16 +56,32 @@ def topPlaylistStats(sp, playlist):
         else:
             albumdict[album] = 0
         if k:
-            print(artist)
             k = False
         for artist in track['artists']:
-            artistname = artist['name']
-            if artistname in artistdict:
-                artistdict[artistname] += 1
-            else:
-                artistdict[artistname] = 0
-    # print({k: v for k, v in sorted(albumdict.items(), key=lambda item: item[1])})
-    # print({k: v for k, v in sorted(artistdict.items(), key=lambda item: item[1])})
-
-
+            gendata = sp.artist(artist['uri'])
+            if gendata['images']:
+                artistinfo = gendata['images'][1]['url']
+                if artistinfo in artistdict:
+                    artistdict[artistinfo] += 1
+                else:
+                    artistdict[artistinfo] = 0
+    albumfrequencies = [k for k, v in sorted(albumdict.items(), key=lambda item: item[1])]
+    artistfrequencies = [k for k, v in sorted(artistdict.items(), key=lambda item: item[1])]
+    createImage(albumfrequencies, artistfrequencies)
     pass
+
+# def fillImage():
+
+def createImage(albumfrequencies, artistfrequencies):
+    print('started creation')
+    background = Image.new('RGBA', (1440, 1440), (255, 255, 255, 255))
+    bg_w, bg_h = background.size
+    for albumimage in albumfrequencies:
+        response = requests.get(albumimage)
+        img = Image.open(BytesIO(response.content))
+        offset = (random.randint(0,1439),random.randint(0,1439))
+        background.paste(img, offset)
+        # background.show()
+        # break
+    print('finished')
+    background.show()

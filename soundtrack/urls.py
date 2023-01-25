@@ -5,6 +5,7 @@ urlpatterns = [
     path('', views.Home, name='home'),
     path('track', views.Track, name='track'),
     path('connect', views.Select, name='connect'),
+    path('generate', views.Generate, name='generate'),
 ]
 
 from django.conf import settings

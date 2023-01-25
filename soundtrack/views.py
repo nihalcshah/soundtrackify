@@ -25,5 +25,12 @@ def Select(request):
     token = spauth.get_access_token(code)
     sp = spotipy.Spotify(token["access_token"])
     playlists = sp.current_user_playlists()
-    print(playlists['items'])
     return render(request, 'playlists.html', context={"playlists":playlists['items']})
+
+def Generate(request):
+    spauth = getAuth(request)
+    sp = spotipy.Spotify(spauth.get_cached_token()["access_token"])
+    if request.method == "POST":
+        playlisturi = request.POST.get("playlisturi")
+        topPlaylistStats(sp, playlisturi)
+    return redirect("home")
