@@ -1,7 +1,8 @@
 
 export const authEndpoint = "https://accounts.spotify.com/authorize"
 
-const redirectUri = "http://localhost:3000/lab"
+// const redirectUri = "http://localhost:3000/lab"
+const redirectUri = "https://www.soundtrackify.cjshah.org/lab"
 
 const scopes = [
     "user-top-read",
