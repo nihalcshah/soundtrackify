@@ -23,7 +23,7 @@ function Home() {
                     overlay.style.display = "none";
                 }
             }, false);
-        }, 400);
+        }, 4000);
         return () => clearTimeout(timerId);
     }, []);
 
